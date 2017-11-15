@@ -1,0 +1,48 @@
+extend layout.pug
+  
+      
+block main
+  .row
+    .col.s12.center
+      h1.header Going out tonight?
+      p.card-title Search a place..
+  .row
+    .col.s12
+      #search-box
+        .input-field
+          input(type="text" id="query" v-model="query" @keyup.enter="search")
+          label(for="query") Where are you now?
+        .input-field
+          a.btn.btn-success.cyan(@click="search") Go
+  .row
+    .col.s12
+      .preloader-wrapper.big.active.center(v-if="loading")
+        .spinner-layer.spinner-red-only
+          .circle-clipper.left
+            .circle
+          .gap-patch
+            .circle
+          .circle-clipper.right
+            .circle
+      ul
+        li(v-for="place in places")
+          .card.horizontal.black-text
+            img(width="200px", height="200px", v-bind:src="place.image_url")
+            .card-stacked
+              .card-content
+                span.card-title.black-text {{place.name}}
+                p
+                  div.italic.grey-text
+                    i.fa.fa-map-marker.italic 
+                    span  {{place.location.display_address.join(" ")}}
+                  div
+                    i.fa.fa-cutlery
+                    span  {{ getCategories(place.categories) }}
+                  div.pink-text
+                    i.fa.fa-star(v-for="i in parseInt(place.rating)")
+                  div.red-text 0 are going tonight
+              .card-action
+                a.cyan-text(href="#", @click="iamgoing") I am going 
+                  i.fa.fa-telegram
+                a.cyan-text(v-bind:href="place.url" target="_blank") Visit  
+                  i.fa.fa-external-link-square
